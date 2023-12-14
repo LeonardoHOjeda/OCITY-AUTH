@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  database:
+    container_name: postgres_database
+    image: postgres
+    volumes:
+      - ./ocity-auth:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test
+
+  pgAdmin:
+    depends_on:
+      - database
+    image: dpage/pgadmin4
+    ports:
+      - 8080:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@test.com
+      PGADMIN_DEFAULT_PASSWORD: test

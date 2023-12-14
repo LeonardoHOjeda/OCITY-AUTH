@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "allowJs": true,
+    "outDir": "./build",
+    "rootDir": ".",
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": "./src",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "typeRoots": ["@types", "node_modules/@types"],
+    "paths": {
+      "@/*": ["./*"],
+      "@config/*": ["config/*"],
+      "@database/*": ["database/*"],
+      "@entities/*": ["entities/*"],
+      "@helpers/*": ["helpers/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@modules/*": ["modules/*"]
+    }
+  },
+  "exclude": ["node_modules", "build"]
+}
