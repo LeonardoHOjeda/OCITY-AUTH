@@ -10,6 +10,8 @@ import { rateLimiterMiddleware } from './middlewares/rate_limiter'
 import { settings } from './config/settings'
 import { handleErrorMiddleware } from './middlewares/error_handler'
 import { AppDataSource } from './database/datasources'
+import passport from 'passport'
+import { JWTStrategy } from '@/middlewares/passport'
 
 class App {
   public app: express.Application
@@ -29,6 +31,9 @@ class App {
     this.app.use(helmet())
     this.app.use(express.json())
     this.app.use(express.urlencoded({ extended: false }))
+
+    this.app.use(passport.initialize())
+    passport.use('jwt', JWTStrategy)
   }
 
   routes () {

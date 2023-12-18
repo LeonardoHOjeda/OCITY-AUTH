@@ -1,7 +1,9 @@
+import jwt from 'jsonwebtoken'
 import { User } from '@/entities/user.entity'
 import { usersService } from '../users/users.service'
 import { HTTPError } from '@/middlewares/error_handler'
 import bcrypt from 'bcrypt'
+import { settings } from '@/config/settings'
 
 class AuthService {
   async register (user: User) {
@@ -14,6 +16,9 @@ class AuthService {
     const user = await User.findOne({
       where: {
         username
+      },
+      relations: {
+        roles: true
       }
     })
 
@@ -23,7 +28,14 @@ class AuthService {
 
     if (!isMatch) throw new HTTPError(401, 'Bad Credentials')
 
-    return user
+    const token = jwt.sign({ user_id: user.id, country: user.country }, settings.SECRET, { expiresIn: '1h' })
+
+    delete (user as any).pswd
+
+    return {
+      user,
+      token
+    }
   }
 }
 
