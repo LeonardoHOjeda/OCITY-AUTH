@@ -6,7 +6,7 @@ export class UserFactory {
     const user = User.create({
       username: faker.internet.userName(),
       surname: faker.person.lastName(),
-      phone: faker.phone.number(),
+      phone: faker.phone.number().slice(0, 20),
       email: faker.internet.email(),
       pswd: faker.internet.password(),
       postalCode: faker.location.zipCode(),

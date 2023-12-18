@@ -31,7 +31,9 @@ export async function store (req: Request, res: Response, next: NextFunction): P
 
 export async function update (req: Request, res: Response, next: NextFunction): Promise<void> {
   const { id } = req.params
-  // const updater = new UsersService()
+  const updater = await usersService.update(Number(id), req.body)
+
+  res.json(updater)
 }
 
 export async function destroy (req: Request, res: Response, next: NextFunction): Promise<void> {

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsc-watch --onSuccess \"node build/index\"",
+    "dev": "tsc-watch --onSuccess \"node build/src/index\"",
     "clean": "rm -rf build",
     "build": "tsc",
     "start": "node build",

@@ -41,7 +41,7 @@ describe('User Crud (v1_1)', () => {
     const response = await request().post('/api/v1_1/users').send({
       username: data.username,
       surname: data.surname,
-      phone: data.phone,
+      phone: '4111181431',
       email: data.email,
       pswd: data.pswd,
       postalCode: data.postalCode,
@@ -65,8 +65,29 @@ describe('User Crud (v1_1)', () => {
     expect(exists?.roles).toHaveLength(3)
   })
 
-  test('should update an user', () => {
-    expect(1).toBe(1)
+  test('should update an user', async () => {
+    const data = await UserFactory.createOne()
+
+    const response = await request().put(`/api/v1_1/users/${data.id}`).send({
+      username: data.username + ' Updated',
+      surname: data.surname + ' Updated',
+      country: data.country,
+      roles: [1, 2, 3, 4]
+    }).expect(200)
+
+    const updated = await User.findOne({
+      where: {
+        id: response.body.id
+      },
+      relations: {
+        roles: true
+      }
+    })
+
+    expect(updated).toBeTruthy()
+    expect(updated?.username).toBe(data.username + ' Updated')
+    expect(updated?.surname).toBe(data.surname + ' Updated')
+    expect(updated?.roles).toHaveLength(4)
   })
 
   test('should delete an user', async () => {

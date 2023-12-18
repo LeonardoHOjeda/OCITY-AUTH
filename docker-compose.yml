@@ -2,12 +2,12 @@ version: '3.8'
 services:
   database:
     container_name: postgres_database
-    image: postgres
+    image: postgres:16.1
     volumes:
       - ./ocity-auth:/var/lib/postgresql/data
     restart: always
     ports:
-      - 5433:5432
+      - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: test
