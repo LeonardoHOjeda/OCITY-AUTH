@@ -28,7 +28,8 @@ export class CreateUsersTable1702425064369 implements MigrationInterface {
           },
           {
             name: 'email',
-            type: 'varchar(100)'
+            type: 'varchar(100)',
+            isUnique: true
           },
           {
             name: 'pswd',

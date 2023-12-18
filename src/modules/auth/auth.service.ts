@@ -1,25 +1,30 @@
-export class AuthService {
-  async findOne (id: any): Promise<Object> {
-    return {}
+import { User } from '@/entities/user.entity'
+import { usersService } from '../users/users.service'
+import { HTTPError } from '@/middlewares/error_handler'
+import bcrypt from 'bcrypt'
+
+class AuthService {
+  async register (user: User) {
+    const newUser = await usersService.store(user)
+
+    return newUser
   }
 
-  async findAll (): Promise<Object[]> {
-    return []
-  }
+  async login (username: string, password: string) {
+    const user = await User.findOne({
+      where: {
+        username
+      }
+    })
 
-  async update (id: any, body: any): Promise<Object> {
-    return {}
-  }
+    if (user == null) throw new HTTPError(401, 'Bad Credentials')
 
-  async store (body: any): Promise<Object> {
-    return {}
-  }
+    const isMatch = bcrypt.compareSync(password, user.pswd)
 
-  async destroy (id: any): Promise<Object> {
-    return {}
-  }
+    if (!isMatch) throw new HTTPError(401, 'Bad Credentials')
 
-  async delete (id: any): Promise<Object> {
-    return {}
+    return user
   }
 }
+
+export const authService = new AuthService()

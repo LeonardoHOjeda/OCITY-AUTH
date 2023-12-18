@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { UserRole } from '@/entities/user_role.entity'
-import { User } from '../../entities/user.entity'
-import { HTTPError } from '../../middlewares/error_handler'
+import { User } from '@/entities/user.entity'
+import { HTTPError } from '@/middlewares/error_handler'
+import bcrypt from 'bcrypt'
 
 class UsersService {
   async findAll (): Promise<User[]> {
@@ -24,13 +25,34 @@ class UsersService {
     return user
   }
 
-  async store (body: any): Promise<User> {
-    const user = await User.create({
-      ...body,
-      roles: body.roles?.map((role: number) => UserRole.create({ role_id: role }))
+  async store (user: any): Promise<Omit<User, 'pswd'>> {
+    const userExists = await User.findOne({
+      where: [
+        { email: user.email }
+      ]
+    })
+
+    if (user.email === userExists?.email) throw new HTTPError(409, 'Email already exists')
+
+    const hashedPswd = await bcrypt.hash(user.pswd, 10)
+
+    const created = await User.create({
+      username: user.username,
+      surname: user.surname,
+      phone: user.phone,
+      email: user.email,
+      pswd: hashedPswd,
+      postalCode: user.postalCode,
+      name: user.name,
+      street: user.street,
+      locality: user.locality,
+      country: user.country,
+      roles: user.roles?.map((role: number) => UserRole.create({ role_id: role }))
     }).save()
 
-    return user
+    delete (created as any).pswd
+
+    return created
   }
 
   async update (id: number, body: any): Promise<any> {
